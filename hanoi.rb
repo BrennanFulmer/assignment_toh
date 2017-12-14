@@ -12,22 +12,15 @@
 
 # need to convert the whole thing to a class
 
-#height only in method
-
-#break instead of exit / further test while conditions
-
 a, b, c, solution = [], [], [], []
 input, height, from, to = 0, 0, 0, 0
 
-#puts "#{height} 1"
-#def build(height)
-#testy = gets.chomp
-#puts "#{testy}"
-#mod = testy.to_i
-#puts "#{mod}"
-#height = mod
-#return height
-#end
+def build(height)
+  print "How many discs would you like there to be in the tower? "
+  # user input validation
+  height = gets.chomp.to_i
+  return height
+end
 
 def winCondition(height, solution, a)
   disc = 1
@@ -82,18 +75,12 @@ def move(a, b, c, from, to, solution)
   return a, b, c, from, to
 end
 
-
-print "How many discs would you like there to be in the tower? "
 # user input validation
-height = gets.chomp.to_i
-#build(height)
+height = build(height)
+
 winCondition(height, solution, a)
 
-c = solution
-
-while(c != solution || from != "quit" || to != "quit")
-  puts "passed while"
-  exit if c == solution
+while(c != solution)
 
   render(a, b, c)
 
