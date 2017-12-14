@@ -17,9 +17,13 @@ input, height, from, to = 0, 0, 0, 0
 
 def build(height)
   print "How many discs would you like there to be in the tower? "
-  # user input validation
   height = gets.chomp.to_i
-  return height
+  if height > 0
+   return height
+ else
+   puts "Please enter a number greater than 0"
+   build(height)
+ end
 end
 
 def winCondition(height, solution, a)
@@ -78,7 +82,6 @@ def move(a, b, c, from, to, solution)
   return a, b, c, from, to
 end
 
-# user input validation
 height = build(height)
 
 winCondition(height, solution, a)
