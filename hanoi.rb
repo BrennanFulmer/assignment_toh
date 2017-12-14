@@ -9,6 +9,20 @@
 =end
 
 # need to display the rules/directions somewhere
+# need to convert the whole thing to a class
+
+a, b, c, solution = [], [], [], []
+input, height, from, to = 0, 0, 0, 0
+
+#puts "#{height} 1"
+#def build(height)
+#testy = gets.chomp
+#puts "#{testy}"
+#mod = testy.to_i
+#puts "#{mod}"
+#height = mod
+#return height
+#end
 
 def winCondition(height, solution, a)
   disc = 1
@@ -32,7 +46,7 @@ def render(a, b, c)
 end
 
 # needs to handle moves that are against the rules
-def move(a, b, c, from, to)
+def move(a, b, c, from, to, solution)
   print "\nEnter where you'd like to move from "
   from = gets.chomp
   print "\nEnter where you'd like to move to "
@@ -60,27 +74,29 @@ def move(a, b, c, from, to)
   else
     puts "\nPlease either enter quit to end the game or one of the following letters\na\nb\nc\n"
   end
+  return a, b, c, from, to
 end
 
-a, b, c, solution = [], [], [], [nil]
-input, height, from, to = 0, nil, 0, 0
+
 print "How many discs would you like there to be in the tower? "
 # user input validation
 height = gets.chomp.to_i
+#build(height)
 winCondition(height, solution, a)
 
-while from != "quit" || to != "quit"
-  if c == solution
-    puts "you won!"
-    exit
-  end
-render(a, b, c)
+c = solution
+
+while(c != solution || from != "quit" || to != "quit")
+  puts "passed while"
+  exit if c == solution
+
+  render(a, b, c)
 
 # needs to handle moves that are against the rules
-move(a, b, c, from, to)
+  move(a, b, c, from, to, solution)
 
 end
-
+puts "you won!"
 
 
 
