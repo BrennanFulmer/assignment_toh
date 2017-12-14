@@ -8,19 +8,7 @@
     3. No disk may be placed on top of a smaller disk.
 =end
 
-input = 0
-board = {}
-inputy = 0
-
-while input != "quit" || input == "win"
-  if inputy == 0
-    print "How many discs would you like there to be in the tower? "
-    inputy = gets.chomp
-    height = inputy.to_i
-    spacing = " " * height
-  end
-
-# turn this into a method called initialBoard
+def initialBoard(height, spacing, board)
   disc = 0
   while disc < height
     disc += 1
@@ -28,18 +16,65 @@ while input != "quit" || input == "win"
     board["disc#{disc}"] = size + spacing * 2
   end
   board["base"] = "1" + spacing + "2" + spacing + "3"
+  return board
+end
 
-# turn this into a method called render, which should later be improved to make the display prettier
+def winCondition(height, spacing, winCondition)
+  disc = 0
+  while disc < height
+    disc += 1
+    size = ("o" * disc) + " " * (height - disc)
+    winCondition["disc#{disc}"] = spacing * 2 + size
+  end
+  winCondition["base"] = "1" + spacing + "2" + spacing + "3"
+  return winCondition
+end
+
+# make this create a prettier display later
+def render(height, board)
   disc = 0
   while disc < height
     disc += 1
     puts board["disc#{disc}"]
   end
   puts board["base"]
+end
 
-# create a method called winCondition which generates what the winning board would look like that converts input into "win" if true
+# this will become initialize in the class version
+input = 0
+board = {}
+inputy = 0
+winCondition = {}
+print "How many discs would you like there to be in the tower? "
+inputy = gets.chomp
+height = inputy.to_i
+spacing = " " * height
+initialBoard(height, spacing, board)
+winCondition(height, spacing, winCondition)
+
+while input != "quit"
+
+  if board == winCondition
+    puts "you won!"
+    exit
+  end
+
+  render(height, board)
+
+  
 
 # create a method to process moving discs, it needs to handle moves that are against the rules
 
   input = gets.chomp
 end
+
+
+
+
+
+
+
+
+
+
+# spacing
