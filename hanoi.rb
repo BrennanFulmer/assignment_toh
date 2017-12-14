@@ -47,6 +47,9 @@ end
 def move(a, b, c, from, to, solution)
   print "\nEnter where you'd like to move from "
   from = gets.chomp
+  if from == "quit"
+    exit
+  end
   print "\nEnter where you'd like to move to "
   to = gets.chomp
   if from == "a" && to == "b"
@@ -67,7 +70,7 @@ def move(a, b, c, from, to, solution)
   elsif from == "c" && to == "b"
     b << c[0]
     c.shift
-  elsif from == "quit" || to == "quit"
+  elsif to == "quit"
     exit
   else
     puts "\nPlease either enter quit to end the game or one of the following letters\na\nb\nc\n"
