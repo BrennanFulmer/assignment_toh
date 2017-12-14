@@ -10,51 +10,75 @@
 
 # need to display the rules/directions somewhere
 
-def winCondition(height, solution)
+def winCondition(height, solution, a)
   disc = 1
   while disc <= height
     size = ("o" * disc)
     solution << size
+    a << size
     disc += 1
   end
-  return solution
+  return solution, a
 end
 
 def render(a, b, c)
-  system "cls"
-  system "clear"
+  puts "\n"
   puts a
-  puts "\n-A-"
+  puts "\n-A-\n"
   puts b
-  puts "\n-B-"
+  puts "\n-B-\n"
   puts c
-  puts "\n-C-"
+  puts "\n-C-\n"
 end
 
-def move()
+# needs to handle moves that are against the rules
+def move(a, b, c, from, to)
+  print "\nEnter where you'd like to move from "
+  from = gets.chomp
+  print "\nEnter where you'd like to move to "
+  to = gets.chomp
+  if from == "a" && to == "b"
+    b << a[0]
+    a.shift
+  elsif from == "a" && to == "c"
+    c << a[0]
+    a.shift
+  elsif from == "b" && to == "c"
+    c << b[0]
+    b.shift
+  elsif from == "b" && to == "a"
+    a << b[0]
+    b.shift
+  elsif from == "c" && to == "a"
+    a << c[0]
+    c.shift
+  elsif from == "c" && to == "b"
+    b << c[0]
+    c.shift
+  elsif from == "quit" || to == "quit"
+    exit
+  else
+    puts "\nPlease either enter quit to end the game or one of the following letters\na\nb\nc\n"
+  end
 end
 
-a, b, c, solution = [], [], [], []
-input, height = 0, 0
+a, b, c, solution = [], [], [], [nil]
+input, height, from, to = 0, nil, 0, 0
 print "How many discs would you like there to be in the tower? "
+# user input validation
 height = gets.chomp.to_i
-# need to handle bad inputs
-winCondition(height, solution)
-a = solution
+winCondition(height, solution, a)
 
-while input != "quit"
+while from != "quit" || to != "quit"
   if c == solution
     puts "you won!"
     exit
   end
-
 render(a, b, c)
 
-# create a method to process moving discs, it needs to handle moves that are against the rules
-move()
+# needs to handle moves that are against the rules
+move(a, b, c, from, to)
 
-  input = gets.chomp
-# need to handle bad inputs
 end
 
 
