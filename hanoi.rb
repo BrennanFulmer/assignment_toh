@@ -9,7 +9,12 @@
 =end
 
 # need to display the rules/directions somewhere
+
 # need to convert the whole thing to a class
+
+#height only in method
+
+#break instead of exit / further test while conditions
 
 a, b, c, solution = [], [], [], []
 input, height, from, to = 0, 0, 0, 0
