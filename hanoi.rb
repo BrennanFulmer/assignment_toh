@@ -20,24 +20,24 @@ class Hanoi
     puts "3. A piece cannot be placed onto one that is smaller"
     puts "\nAdditionally you can end the game early by typing quit for one of the prompts"
     puts "\n||_Tower of Hanoi_||"
-    setHeight
+    set_height
   end
 
-  def setHeight
+  def set_height
     puts "\nHow many disks would you like there to be in the tower? "
     puts "(Note: more disks means more difficult, and decimals will be removed)\n\n"
     @height = gets.chomp
-    checkHeight
+    check_height
   end
 
-  def checkHeight
+  def check_height
     if @height == "quit"
       exit
     end
     @height = @height.to_i.ceil
     if @height < 1
      puts "Please enter a number equal to or greater than 1."
-     setHeight
+     set_height
     end
     build
   end
@@ -74,7 +74,7 @@ class Hanoi
     puts "\n||_Tower of Hanoi_||\n"
   end
 
-  def getMove
+  def get_move
     print "\nEnter where you'd like to move from. "
     @from = gets.chomp
     if @from == "quit"
@@ -82,10 +82,10 @@ class Hanoi
     end
     print "\nEnter where you'd like to move to. "
     @to = gets.chomp
-    checkMove
+    check_move
   end
 
-  def checkMove
+  def check_move
     @c = [@height + 1] if @c == []
       @b = [@height + 1] if @b == []
         @a = [@height + 1] if @a == []
@@ -114,7 +114,7 @@ class Hanoi
             puts "\none of the following numbers for moves\n1\n2\n3"
             puts "\nor remember that its against the rules to move a disk onto a smaller disk,"
             puts "\nand that you can't move a disk from an area without one"
-            getMove
+            get_move
           end
             @c.delete_at(@c.index(@height + 1)) if @c.include?(@height + 1)
               @b.delete_at(@b.index(@height + 1)) if @b.include?(@height + 1)
@@ -124,7 +124,7 @@ class Hanoi
   def play
     while(@c != @solution)
       render
-      getMove
+      get_move
     end
     render
     puts "\nyou won!\n\n"
