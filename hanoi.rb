@@ -84,9 +84,9 @@ class Hanoi
           else
             puts "\nPlease either enter quit to end the game\nor one of the following letters when moving\na\nb\nc\nor remember that its against the rules to move a disk onto a smaller disk"
           end
-          @c.delete_at(@c.index(@height + 1)) if @c.include?(@height + 1)
-            @b.delete_at(@b.index(@height + 1)) if @b.include?(@height + 1)
-              @a.delete_at(@a.index(@height + 1)) if @a.include?(@height + 1)
+            @c.delete_at(@c.index(@height + 1)) if @c.include?(@height + 1)
+              @b.delete_at(@b.index(@height + 1)) if @b.include?(@height + 1)
+                @a.delete_at(@a.index(@height + 1)) if @a.include?(@height + 1)
   end
 
   def play
