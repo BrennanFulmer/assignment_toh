@@ -20,10 +20,10 @@ def setHeight(height)
   height = gets.chomp.to_i
   if height > 0
    return height
- else
+  else
    puts "Please enter a number greater than 0"
    setHeight(height)
- end
+  end
 end
 
 def build(height, solution, a)
@@ -36,7 +36,7 @@ def build(height, solution, a)
   return solution, a
 end
 
-# make the display prettier
+# make the display prettier, note you don't have to store it how you show it
 def render(a, b, c)
   puts "\n"
   puts "Tower Of Hanoi\n"

@@ -36,7 +36,7 @@ def build(height, solution, a)
   return solution, a
 end
 
-# make the display prettier
+# make the display prettier, note you don't have to store it how you show it
 def render(a, b, c)
   puts "\n"
   puts "Tower Of Hanoi\n"
