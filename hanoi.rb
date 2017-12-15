@@ -8,47 +8,48 @@
     3. No disk may be placed on top of a smaller disk.
 =end
 
-# need to display the rules/directions somewhere
+# need to display the rules/directions at the start
 
-# need to convert the whole thing to a class
+# need to convert the whole thing into a class
 
 a, b, c, solution = [], [], [], []
-input, height, from, to = 0, 0, 0, 0
+height = 0
 
-def build(height)
-  print "How many discs would you like there to be in the tower? "
+def setHeight(height)
+  print "How many disks would you like there to be in the tower? "
   height = gets.chomp.to_i
   if height > 0
    return height
- else
+  else
    puts "Please enter a number greater than 0"
-   build(height)
- end
+   setHeight(height)
+  end
 end
 
-def winCondition(height, solution, a)
-  disc = 1
-  while disc <= height
-    size = ("o" * disc)
-    solution << size
-    a << size
-    disc += 1
+def build(height, solution, a)
+  disk = 1
+  while disk <= height
+    solution << disk
+    a << disk
+    disk += 1
   end
   return solution, a
 end
 
+# make the display prettier
 def render(a, b, c)
   puts "\n"
+  puts "Tower Of Hanoi\n"
   puts a
   puts "\n-A-\n"
   puts b
   puts "\n-B-\n"
   puts c
   puts "\n-C-\n"
+    puts "Tower Of Hanoi\n"
 end
 
-# needs to handle moves that are against the rules
-def move(a, b, c, from, to, solution)
+def move(a, b, c, height)
   print "\nEnter where you'd like to move from "
   from = gets.chomp
   if from == "quit"
@@ -56,45 +57,48 @@ def move(a, b, c, from, to, solution)
   end
   print "\nEnter where you'd like to move to "
   to = gets.chomp
-  if from == "a" && to == "b"
-    b << a[0]
-    a.shift
-  elsif from == "a" && to == "c"
-    c << a[0]
-    a.shift
-  elsif from == "b" && to == "c"
-    c << b[0]
-    b.shift
-  elsif from == "b" && to == "a"
-    a << b[0]
-    b.shift
-  elsif from == "c" && to == "a"
-    a << c[0]
-    c.shift
-  elsif from == "c" && to == "b"
-    b << c[0]
-    c.shift
-  elsif to == "quit"
-    exit
-  else
-    puts "\nPlease either enter quit to end the game or one of the following letters\na\nb\nc\n"
-  end
-  return a, b, c, from, to
+  c = [height + 1] if c == []
+    b = [height + 1] if b == []
+      a = [height + 1] if a == []
+        if from == "a" && to == "b" && a[0] < b[0]
+          b.unshift(a[0])
+          a.shift
+        elsif from == "a" && to == "c" && a[0] < c[0]
+          c.unshift(a[0])
+          a.shift
+        elsif from == "b" && to == "c" && b[0] < c[0]
+          c.unshift(b[0])
+          b.shift
+        elsif from == "b" && to == "a" && b[0] < a[0]
+          a.unshift(b[0])
+          b.shift
+        elsif from == "c" && to == "a" && c[0] < a[0]
+          a.unshift(c[0])
+          c.shift
+        elsif from == "c" && to == "b" && c[0] < b[0]
+          b.unshift(c[0])
+          c.shift
+        elsif to == "quit"
+          exit
+        else
+          puts "\nPlease either enter quit to end the game\nor one of the following letters when moving\na\nb\nc\n\nor remember that its against the rules to move a disk onto a smaller disk"
+        end
+        c.delete_at(c.index(height + 1)) if c.include?(height + 1)
+          b.delete_at(b.index(height + 1)) if b.include?(height + 1)
+            a.delete_at(a.index(height + 1)) if a.include?(height + 1)
+              return a, b, c
 end
 
-height = build(height)
-
-winCondition(height, solution, a)
+height = setHeight(height)
+solution, a = build(height, solution, a)
 
 while(c != solution)
-
   render(a, b, c)
-
-# needs to handle moves that are against the rules
-  move(a, b, c, from, to, solution)
-
+  a, b, c = move(a, b, c, height)
 end
-puts "you won!"
+
+render(a, b, c)
+puts "\nyou won!"
 
 
 
