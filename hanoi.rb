@@ -2,7 +2,7 @@
 =begin
   Documents/Viking/Ruby/Hanoi
 
-  need to display the rules/directions at the start
+  improve visuals in render
 
   usual checklist finishing touches
 =end
@@ -14,11 +14,21 @@ class Hanoi
     @c = []
     @solution = []
     @height = 0
+    system "cls"
+    system "clear"
+    puts "\n||_Tower of Hanoi_||"
+    puts "\nThe objective of the Tower of Hanoi game is to move all the pieces from the first area to the third"
+    puts "\nThe rules are:"
+    puts "1. You can only move one piece at a time"
+    puts "2. During each move you take a piece from the top of a stack to the top of another stack"
+    puts "3. A piece cannot be placed onto one that is smaller"
+    puts "\n||_Tower of Hanoi_||"
     setHeight
   end
 
   def setHeight
-    print "How many disks would you like there to be in the tower? "
+    puts "\nHow many disks would you like there to be in the tower? "
+    puts "(Note: more disks means more difficult)\n\n"
     @height = gets.chomp.to_i
     if @height < 0
      puts "Please enter a number greater than 0"
@@ -37,17 +47,21 @@ class Hanoi
     play
   end
 
-# make the display prettier, note you don't have to store it how you show it
+=begin
+ make the display prettier, note you don't have to store it how you show it
+ iterate through the values of each array and multiply them by "o" then push that into a new local only display array
+ dont forget to make the border/framing better looking
+=end
+
   def render
-    puts "\n"
-    puts "Tower Of Hanoi\n"
+    puts "\n||_Tower of Hanoi_||\n\n"
     puts @a
     puts "\n-A-\n"
     puts @b
     puts "\n-B-\n"
     puts @c
     puts "\n-C-\n"
-    puts "Tower Of Hanoi\n"
+    puts "\n||_Tower of Hanoi_||\n"
   end
 
   def move
@@ -95,9 +109,9 @@ class Hanoi
       move
     end
     render
-    puts "\nyou won!"
+    puts "\nyou won!\n\n"
   end
 
 end
 
-tower = Hanoi.new
+Hanoi.new
