@@ -1,12 +1,4 @@
 
-=begin
-  Documents/Viking/Ruby/Hanoi
-
-  improve visuals in render
-
-  usual checklist finishing touches
-=end
-
 class Hanoi
   def initialize
     @a = []
@@ -31,72 +23,77 @@ class Hanoi
     puts "(Note: more disks means more difficult)\n\n"
     @height = gets.chomp.to_i
     if @height < 0
-     puts "Please enter a number greater than 0"
+     puts "Please enter a number greater than 0."
      setHeight
     end
     build
   end
 
   def build
+# this method both sets up the initial board, and sets what the winning board should look like
     disk = 1
     while disk <= @height
-      @solution << disk
       @a << disk
+      @solution << disk
       disk += 1
     end
     play
   end
 
-=begin
- make the display prettier, note you don't have to store it how you show it
- iterate through the values of each array and multiply them by "o" then push that into a new local only display array
- dont forget to make the border/framing better looking
-=end
-
   def render
+    a_board, b_board, c_board = [], [], []
+    @a.each do |diskify|
+      a_board << "o" * diskify
+    end
+    @b.each do |diskify|
+      b_board << "o" * diskify
+    end
+    @c.each do |diskify|
+      c_board << "o" * diskify
+    end
     puts "\n||_Tower of Hanoi_||\n\n"
-    puts @a
-    puts "\n-A-\n"
-    puts @b
-    puts "\n-B-\n"
-    puts @c
-    puts "\n-C-\n"
+    puts a_board
+    puts "\n|_-1-_|\n\n"
+    puts b_board
+    puts "\n|_-2-_|\n\n"
+    puts c_board
+    puts "\n|_-3-_|\n"
     puts "\n||_Tower of Hanoi_||\n"
   end
 
   def move
-    print "\nEnter where you'd like to move from "
+    print "\nEnter where you'd like to move from. "
     from = gets.chomp
     if from == "quit"
       exit
     end
-    print "\nEnter where you'd like to move to "
+    print "\nEnter where you'd like to move to. "
     to = gets.chomp
       @c = [@height + 1] if @c == []
         @b = [@height + 1] if @b == []
           @a = [@height + 1] if @a == []
-            if from == "a" && to == "b" && @a[0] < @b[0]
+            if from == "1" && to == "2" && @a[0] < @b[0]
               @b.unshift(@a[0])
               @a.shift
-            elsif from == "a" && to == "c" && @a[0] < @c[0]
+            elsif from == "1" && to == "3" && @a[0] < @c[0]
               @c.unshift(@a[0])
               @a.shift
-            elsif from == "b" && to == "c" && @b[0] < @c[0]
+            elsif from == "2" && to == "3" && @b[0] < @c[0]
               @c.unshift(@b[0])
               @b.shift
-            elsif from == "b" && to == "a" && @b[0] < @a[0]
+            elsif from == "2" && to == "1" && @b[0] < @a[0]
               @a.unshift(@b[0])
               @b.shift
-            elsif from == "c" && to == "a" && @c[0] < @a[0]
+            elsif from == "3" && to == "1" && @c[0] < @a[0]
               @a.unshift(@c[0])
               @c.shift
-            elsif from == "c" && to == "b" && @c[0] < @b[0]
+            elsif from == "3" && to == "2" && @c[0] < @b[0]
               @b.unshift(@c[0])
               @c.shift
             elsif to == "quit"
               exit
             else
-              puts "\nPlease either enter quit to end the game\nor one of the following letters when moving\na\nb\nc\nor remember that its against the rules to move a disk onto a smaller disk"
+              puts "\nPlease either enter quit to end the game\nor one of the following numbers for moves\n1\n2\n3\nor remember that its against the rules to move a disk onto a smaller disk"
             end
               @c.delete_at(@c.index(@height + 1)) if @c.include?(@height + 1)
                 @b.delete_at(@b.index(@height + 1)) if @b.include?(@height + 1)
