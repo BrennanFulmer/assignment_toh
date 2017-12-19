@@ -1,15 +1,16 @@
 
 class Hanoi
   def initialize
+    @height = 0
     @a = []
     @b = []
     @c = []
     @solution = []
-    @height = 0
-    instructions
+    @moves = [1, 2, 3]
+    rule
   end
 
-  def instructions
+  def rule
     system "cls"
     system "clear"
     puts "\n||_Tower of Hanoi_||"
@@ -23,17 +24,21 @@ class Hanoi
     set_height
   end
 
+  def quit_check(testy)
+    if testy == "quit"
+      exit
+    end
+  end
+
   def set_height
-    puts "\nHow many disks would you like there to be in the tower? "
-    puts "(Note: more disks means more difficult, and decimals will be removed)\n\n"
+    puts "\n (Note: more disks means more difficult, and decimals will be removed)"
+    print "How many disks would you like there to be in the tower? "
     @height = gets.chomp
     check_height
   end
 
   def check_height
-    if @height == "quit"
-      exit
-    end
+    quit_check(@height)
     @height = @height.to_i.ceil
     if @height < 1
      puts "Please enter a number equal to or greater than 1."
@@ -42,13 +47,11 @@ class Hanoi
     build
   end
 
+# this method both sets up the initial board, and what the winning board looks like
   def build
-# this method both sets up the initial board, and sets what the winning board should look like
-    disk = 1
-    while disk <= @height
+    (@height + 1).times do |disk|
       @a << disk
       @solution << disk
-      disk += 1
     end
     play
   end
@@ -77,43 +80,57 @@ class Hanoi
   def get_move
     print "\nEnter where you'd like to move from. "
     @from = gets.chomp
-    if @from == "quit"
-      exit
-    end
+    quit_check(@from)
     print "\nEnter where you'd like to move to. "
     @to = gets.chomp
     check_move
   end
 
   def check_move
+    quit_check(@to)
+    @to = @to.to_i
+    @from = @from.to_i
+    if !@moves.include?(@from) || !@moves.include?(@to)
+      puts "\nPlease enter one of the following numbers for moves\n1\n2\n3\nor enter quit to end the game"
+      get_move
+    elsif @from == 3 && @c.empty?
+      puts "\nYou can't move a disk from an area without one, try again"
+      get_move
+    elsif @from == 2 && @b.empty?
+      puts "\nYou can't move a disk from an area without one, try again"
+      get_move
+    elsif @from == 1 && @a.empty?
+      puts "\nYou can't move a disk from an area without one, try again"
+      get_move
+    else
+      move
+    end
+  end
+
+  def move
     @c = [@height + 1] if @c == []
       @b = [@height + 1] if @b == []
         @a = [@height + 1] if @a == []
-          if @from == "1" && @to == "2" && @a[0] < @b[0]
+          if @from == 1 && @to == 2 && @a[0] < @b[0]
             @b.unshift(@a[0])
             @a.shift
-          elsif @from == "1" && @to == "3" && @a[0] < @c[0]
+          elsif @from == 1 && @to == 3 && @a[0] < @c[0]
             @c.unshift(@a[0])
             @a.shift
-          elsif @from == "2" && @to == "3" && @b[0] < @c[0]
+          elsif @from == 2 && @to == 3 && @b[0] < @c[0]
             @c.unshift(@b[0])
             @b.shift
-          elsif @from == "2" && @to == "1" && @b[0] < @a[0]
+          elsif @from == 2 && @to == 1 && @b[0] < @a[0]
             @a.unshift(@b[0])
             @b.shift
-          elsif @from == "3" && @to == "1" && @c[0] < @a[0]
+          elsif @from == 3 && @to == 1 && @c[0] < @a[0]
             @a.unshift(@c[0])
             @c.shift
-          elsif @from == "3" && @to == "2" && @c[0] < @b[0]
+          elsif @from == 3 && @to == 2 && @c[0] < @b[0]
             @b.unshift(@c[0])
             @c.shift
-          elsif @to == "quit"
-            exit
           else
-            puts "\nPlease either enter quit to end the game,\n"
-            puts "\none of the following numbers for moves\n1\n2\n3"
-            puts "\nor remember that its against the rules to move a disk onto a smaller disk,"
-            puts "\nand that you can't move a disk from an area without one"
+            puts "\nIts against the rules to move a disk onto a smaller disk, try again"
             get_move
           end
             @c.delete_at(@c.index(@height + 1)) if @c.include?(@height + 1)
