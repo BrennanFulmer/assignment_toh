@@ -24,17 +24,17 @@ class Hanoi
     set_height
   end
 
-  def quit_check(testy)
-    if testy == "quit"
-      exit
-    end
-  end
-
   def set_height
     puts "\n (Note: more disks means more difficult, and decimals will be removed)"
     print "How many disks would you like there to be in the tower? "
     @height = gets.chomp
     check_height
+  end
+
+  def quit_check(input)
+    if input == "quit"
+      exit
+    end
   end
 
   def check_height
@@ -47,7 +47,6 @@ class Hanoi
     build
   end
 
-# this method both sets up the initial board, and what the winning board looks like
   def build
     (@height + 1).times do |disk|
       @a << disk
