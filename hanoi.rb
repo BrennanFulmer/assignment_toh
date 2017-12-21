@@ -1,7 +1,4 @@
 
-# require "pry"
-# binding.pry
-
 class Hanoi
   def initialize
     @height = 0
@@ -10,10 +7,10 @@ class Hanoi
     @c = []
     @solution = []
     @moves = ["1", "2", "3"]
-    rule
+    rules
   end
 
-  def rule
+  def rules
     system "cls"
     system "clear"
     puts "\n||_Tower of Hanoi_||"
@@ -31,15 +28,15 @@ class Hanoi
     puts "\n (Note: more disks means more difficult, and decimals will be removed)"
     print "How many disks would you like there to be in the tower? "
     @height = gets.chomp
-    quit_check(@height)
-    check_height
+    quit(@height)
+    valid_height
   end
 
-  def quit_check(input)
+  def quit(input)
     exit if input == "quit"
   end
 
-  def check_height
+  def valid_height
     @height = @height.to_i.ceil
     if @height < 1
      puts "Please enter a number equal to or greater than 1."
@@ -59,7 +56,7 @@ class Hanoi
   def play
     while(@c != @solution)
       render
-      set_from
+      point_a
     end
     render
     puts "\nyou won!\n\n"
@@ -87,79 +84,71 @@ class Hanoi
     puts "\n||_Tower of Hanoi_||\n"
   end
 
-  def set_from
+  def point_a
     print "\nEnter where you'd like to move from. "
     @from = gets.chomp
-    quit_check(@from)
+    quit(@from)
     valid_move(@from)
-    check_move(@from)
+    @from = convert(@from)
+    empty
   end
 
   def valid_move(input)
     if !@moves.include?(input)
       puts "\nPlease enter one of the following numbers for moves\n1\n2\n3\nor enter quit to end the game"
       if input == @from
-        set_from
+        point_a
       else
-        set_to
+        point_b
       end
     end
   end
 
-  def check_move(input)
-    if input == @from
-      @from = convert_move(@from)
-      empty_check
-    elsif input == @to
-      @to = convert_move(@to)
-      move_same
+  def convert(move)
+    if move == "3"
+      move = @c
+    elsif move == "2"
+      move = @b
+    elsif move == "1"
+      move = @a
     end
   end
 
-  def convert_move(input)
-    if input == "3"
-      input = @c
-    elsif input == "2"
-      input = @b
-    elsif input == "1"
-      input = @a
-    end
-  end
-
-  def empty_check
+  def empty
     if @from.empty?
       puts "\nYou can't move a piece from an area without one, try again"
-      set_from
+      point_a
     else
-      set_to
+      point_b
     end
   end
 
-  def set_to
+  def point_b
     print "\nEnter where you'd like to move to. "
     @to = gets.chomp
-    quit_check(@to)
+    quit(@to)
     valid_move(@to)
-    check_move(@to)
+    @to = convert(@to)
+    same
   end
 
-  def move_same
+  def same
     if @from == @to
       puts "\nYou can't move a piece from and to the same area, try again"
-      set_from
+      point_a
     else
-      smaller_check
+      smaller
     end
   end
 
-  def smaller_check
+  def smaller
     if @to == []
       move
     elsif @from[0] < @to[0]
       move
     else
       puts "\nYou can't move a piece onto a smaller piece, try again"
-      set_from
+      point_a
     end
   end
 
