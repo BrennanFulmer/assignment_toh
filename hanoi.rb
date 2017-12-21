@@ -1,4 +1,7 @@
 
+# require "pry"
+# binding.pry
+
 class Hanoi
   def initialize
     @height = 0
@@ -6,7 +9,7 @@ class Hanoi
     @b = []
     @c = []
     @solution = []
-    @moves = [1, 2, 3]
+    @moves = ["1", "2", "3"]
     rule
   end
 
@@ -28,124 +31,143 @@ class Hanoi
     puts "\n (Note: more disks means more difficult, and decimals will be removed)"
     print "How many disks would you like there to be in the tower? "
     @height = gets.chomp
+    quit_check(@height)
     check_height
   end
 
   def quit_check(input)
-    if input == "quit"
-      exit
-    end
+    exit if input == "quit"
   end
 
   def check_height
-    quit_check(@height)
     @height = @height.to_i.ceil
     if @height < 1
      puts "Please enter a number equal to or greater than 1."
      set_height
     end
-    build
-  end
-
-  def build
-    (@height + 1).times do |disk|
-      @a << disk
-      @solution << disk
-    end
+    build(@a)
+    build(@solution)
     play
   end
 
-  def render
-    a_board, b_board, c_board = [], [], []
-    @a.each do |diskify|
-      a_board << "o" * diskify
+  def build(column)
+    @height.times do |disk|
+      column << disk + 1
     end
-    @b.each do |diskify|
-      b_board << "o" * diskify
-    end
-    @c.each do |diskify|
-      c_board << "o" * diskify
-    end
-    puts "\n||_Tower of Hanoi_||\n\n"
-    puts a_board
-    puts "\n|_-1-_|\n\n"
-    puts b_board
-    puts "\n|_-2-_|\n\n"
-    puts c_board
-    puts "\n|_-3-_|\n"
-    puts "\n||_Tower of Hanoi_||\n"
-  end
-
-  def get_move
-    print "\nEnter where you'd like to move from. "
-    @from = gets.chomp
-    quit_check(@from)
-    print "\nEnter where you'd like to move to. "
-    @to = gets.chomp
-    check_move
-  end
-
-  def check_move
-    quit_check(@to)
-    @to = @to.to_i
-    @from = @from.to_i
-    if !@moves.include?(@from) || !@moves.include?(@to)
-      puts "\nPlease enter one of the following numbers for moves\n1\n2\n3\nor enter quit to end the game"
-      get_move
-    elsif @from == 3 && @c.empty?
-      puts "\nYou can't move a disk from an area without one, try again"
-      get_move
-    elsif @from == 2 && @b.empty?
-      puts "\nYou can't move a disk from an area without one, try again"
-      get_move
-    elsif @from == 1 && @a.empty?
-      puts "\nYou can't move a disk from an area without one, try again"
-      get_move
-    else
-      move
-    end
-  end
-
-  def move
-    @c = [@height + 1] if @c == []
-      @b = [@height + 1] if @b == []
-        @a = [@height + 1] if @a == []
-          if @from == 1 && @to == 2 && @a[0] < @b[0]
-            @b.unshift(@a[0])
-            @a.shift
-          elsif @from == 1 && @to == 3 && @a[0] < @c[0]
-            @c.unshift(@a[0])
-            @a.shift
-          elsif @from == 2 && @to == 3 && @b[0] < @c[0]
-            @c.unshift(@b[0])
-            @b.shift
-          elsif @from == 2 && @to == 1 && @b[0] < @a[0]
-            @a.unshift(@b[0])
-            @b.shift
-          elsif @from == 3 && @to == 1 && @c[0] < @a[0]
-            @a.unshift(@c[0])
-            @c.shift
-          elsif @from == 3 && @to == 2 && @c[0] < @b[0]
-            @b.unshift(@c[0])
-            @c.shift
-          else
-            puts "\nIts against the rules to move a disk onto a smaller disk, try again"
-            get_move
-          end
-            @c.delete_at(@c.index(@height + 1)) if @c.include?(@height + 1)
-              @b.delete_at(@b.index(@height + 1)) if @b.include?(@height + 1)
-                @a.delete_at(@a.index(@height + 1)) if @a.include?(@height + 1)
   end
 
   def play
     while(@c != @solution)
       render
-      get_move
+      set_from
     end
     render
     puts "\nyou won!\n\n"
+    exit
   end
 
+  def render
+    column1, column2, column3 = [], [], []
+    @a.each do |diskify|
+      column1 << "o" * diskify
+    end
+    @b.each do |diskify|
+      column2 << "o" * diskify
+    end
+    @c.each do |diskify|
+      column3 << "o" * diskify
+    end
+    puts "\n||_Tower of Hanoi_||\n\n"
+    puts column1
+    puts "\n|_-1-_|\n\n"
+    puts column2
+    puts "\n|_-2-_|\n\n"
+    puts column3
+    puts "\n|_-3-_|\n"
+    puts "\n||_Tower of Hanoi_||\n"
+  end
+
+  def set_from
+    print "\nEnter where you'd like to move from. "
+    @from = gets.chomp
+    quit_check(@from)
+    valid_move(@from)
+    check_move(@from)
+  end
+
+  def valid_move(input)
+    if !@moves.include?(input)
+      puts "\nPlease enter one of the following numbers for moves\n1\n2\n3\nor enter quit to end the game"
+      if input == @from
+        set_from
+      else
+        set_to
+      end
+    end
+  end
+
+  def check_move(input)
+    if input == @from
+      @from = convert_move(@from)
+      empty_check
+    elsif input == @to
+      @to = convert_move(@to)
+      move_same
+    end
+  end
+
+  def convert_move(input)
+    if input == "3"
+      input = @c
+    elsif input == "2"
+      input = @b
+    elsif input == "1"
+      input = @a
+    end
+  end
+
+  def empty_check
+    if @from.empty?
+      puts "\nYou can't move a piece from an area without one, try again"
+      set_from
+    else
+      set_to
+    end
+  end
+
+  def set_to
+    print "\nEnter where you'd like to move to. "
+    @to = gets.chomp
+    quit_check(@to)
+    valid_move(@to)
+    check_move(@to)
+  end
+
+  def move_same
+    if @from == @to
+      puts "\nYou can't move a piece from and to the same area, try again"
+      set_from
+    else
+      smaller_check
+    end
+  end
+
+  def smaller_check
+    if @to == []
+      move
+    elsif @from[0] < @to[0]
+      move
+    else
+      puts "\nYou can't move a piece onto a smaller piece, try again"
+      set_from
+    end
+  end
+
+  def move
+    @to.unshift(@from[0])
+    @from.shift
+    play
+  end
 end
 
 Hanoi.new
